@@ -12,6 +12,7 @@
 		canvas.observe('mouse:move', function (e) { mousemove(e); });
 		canvas.observe('mouse:up', function (e) { mouseup(e); });
 		canvas.observe('object:scaling', function (e) { objectScaling(e); });
+        
 
 		var started = false;
 		var x = 0;
@@ -21,10 +22,20 @@
 		var square = null;
 
 		/* Mousedown */
-		function mousedown(e) {
-			var s = canvas.getActiveObject();
-			if (s)
-				return;
+        function mousedown(e) {
+            if (e.target && e.target.data)
+            {
+                alert(e.target.data.name);
+                return false;
+            }
+
+            var s = canvas.getActiveObject();
+            if (s)
+            {
+                square = null;
+                return;
+            }
+				
 
 			var mouse = canvas.getPointer(e);
 			started = true;
@@ -43,8 +54,8 @@
 
 
 		/* Mousemove */
-		function mousemove(e) {
-			if (!started) {
+        function mousemove(e) {
+            if (!started) {
 				return false;
 			}
 
@@ -66,6 +77,9 @@
 				started = false;
 			}
 
+            if (!square)
+                return;
+
 			var w = square.get('width');
 			var h = square.get('height');
 
@@ -77,32 +91,101 @@
 			var left = square.get('left');
 			var top = square.get('top');
 
-			var t = new fabric.Text("Название",
-			{
-				fontSize: 12,
-				left: left,
-				top: top,
-				selectable: false,
-				lockScalingX: true,
-				lockScalingY: true,
-				hasRotatingPoint: false
-			});
-					
+            var t1 = new fabric.Text("Некоторый текст 1",
+                {
+                    fontSize: 14,
+                    left: left,
+                    top: top,
+                    selectable: false,
+                    lockScalingX: true,
+                    lockScalingY: true,
+                    hasRotatingPoint: false,
+                    fontFamily: 'Arial'
+                });
 
-			var g = new fabric.Group([square, t], {});
+            var t2 = new fabric.Text("Некоторый текст 2",
+                {
+                    fontSize: 14,
+                    left: left + w - 120,
+                    top: top,
+                    selectable: false,
+                    lockScalingX: true,
+                    lockScalingY: true,
+                    hasRotatingPoint: false,
+                    fontFamily: 'Arial'
+                });
 
+            var g = new fabric.Group([square, t1, t2], {});
+
+            new fabric.Image.fromURL('http://localhost:61101/content/img/cancel.png', function (img)
+            {
+                img1 = img.set({
+                    left: left + 1, top: top + h - 30, scaleX: 0.06, scaleY: 0.06, selectable: false,
+                    data: { name: 'name1'}});
+                
+                canvas.add(img1);
+                g.addWithUpdate(img1);
+            });
+
+            new fabric.Image.fromURL('http://localhost:61101/content/img/chat.png', function (img) {
+                img1 = img.set({
+                    left: left + 41, top: top + h - 30, scaleX: 0.06, scaleY: 0.06, selectable: false,
+                    data: { name: 'name2' }
+                });
+                
+                canvas.add(img1);
+                g.addWithUpdate(img1);
+            });
+
+            new fabric.Image.fromURL('http://localhost:61101/content/img/copy.png', function (img) {
+                img1 = img.set({
+                    left: left + 81, top: top + h - 30, scaleX: 0.06, scaleY: 0.06, selectable: false,
+                    data: { name: 'name3' }});
+                
+                canvas.add(img1);
+                g.addWithUpdate(img1);
+            });
+
+            new fabric.Image.fromURL('http://localhost:61101/content/img/house.png', function (img) {
+                img1 = img.set({
+                    left: left + 121, top: top + h - 30, scaleX: 0.06, scaleY: 0.06, selectable: false,
+                    data: { name: 'name4' }});
+                
+                canvas.add(img1);
+                g.addWithUpdate(img1);
+            });
+
+            new fabric.Image.fromURL('http://localhost:61101/content/img/settings.png', function (img) {
+                img1 = img.set({
+                    left: left + 161, top: top + h - 30, scaleX: 0.06, scaleY: 0.06, selectable: false,
+                    data: { name: 'name5' }});
+                
+                canvas.add(img1);
+                g.addWithUpdate(img1);
+            });
+
+            new fabric.Image.fromURL('http://localhost:61101/content/img/shuffle.png', function (img) {
+                img1 = img.set({
+                    left: left + 201, top: top + h - 30, scaleX: 0.06, scaleY: 0.06, selectable: false,
+                    data: { name: 'name6' }});
+               
+                canvas.add(img1);
+                g.addWithUpdate(img1);
+            });
+            
 			canvas.add(g);
 			canvas.renderAll();
 		}	
 
 		function objectScaling(e) {
-			var text = e.target.item(1),
-				group = e.target,
-				scaleX = text.get('width') / group.get('width'),
-				scaleY = text.get('height') / group.get('height');
-			text.set('scaleX',scaleX);
-			text.set('scaleY',scaleY);  
-		}
+            var text = e.target.item(1);
+            var group = e.target;
+            var scaleX = text.get('width') / group.get('width');
+            var	scaleY = text.get('height') / group.get('height');
+			/*text.set('scaleX',scaleX);
+			text.set('scaleY',scaleY);*/  
+        }
+
 
 		var xd = 50;
 		var maxX = 100;
@@ -153,9 +236,7 @@
 				canvas.add(text);
 				km += 100;
 			}
-		}
-
-		
+		}		
 	});
 </script>
 

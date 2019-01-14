@@ -137,6 +137,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\img\cancel.png" />
+    <Content Include="Content\img\chat.png" />
+    <Content Include="Content\img\copy.png" />
+    <Content Include="Content\img\house.png" />
+    <Content Include="Content\img\settings.png" />
+    <Content Include="Content\img\shuffle.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
