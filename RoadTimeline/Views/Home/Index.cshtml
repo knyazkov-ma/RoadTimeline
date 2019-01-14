@@ -1,8 +1,164 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿<script>
+	$(function () {
 
-<div>
-    
-</div>
+		var canvas = document.getElementById("canvas");
+		canvas.width = window.innerWidth ;
+		canvas.height = window.innerHeight;
+		
+		// создаём "оболочку" вокруг canvas элемента (id="canvas")
+		canvas = new fabric.Canvas('canvas');
+
+		canvas.observe('mouse:down', function (e) { mousedown(e); });
+		canvas.observe('mouse:move', function (e) { mousemove(e); });
+		canvas.observe('mouse:up', function (e) { mouseup(e); });
+		canvas.observe('object:scaling', function (e) { objectScaling(e); });
+
+		var started = false;
+		var x = 0;
+		var y = 0;
+
+
+		var square = null;
+
+		/* Mousedown */
+		function mousedown(e) {
+			var s = canvas.getActiveObject();
+			if (s)
+				return;
+
+			var mouse = canvas.getPointer(e);
+			started = true;
+			x = mouse.x;
+			y = mouse.y;
+
+			square = new fabric.Rect({
+				width: 0,
+				height: 0,
+				left: x,
+				top: y,
+				fill: 'red',				
+				hasRotatingPoint: false
+			});
+		}
+
+
+		/* Mousemove */
+		function mousemove(e) {
+			if (!started) {
+				return false;
+			}
+
+			var mouse = canvas.getPointer(e);
+
+			var w = Math.abs(mouse.x - x),
+				h = Math.abs(mouse.y - y);
+
+			if (!w || !h) {
+				return false;
+			}
+
+			square.set('width', w).set('height', h);			
+		}
+
+		/* Mouseup */
+		function mouseup(e) {
+			if (started) {
+				started = false;
+			}
+
+			var w = square.get('width');
+			var h = square.get('height');
+
+			if (!w || !h) {
+				started = false;
+				return false;
+			}
+
+			var left = square.get('left');
+			var top = square.get('top');
+
+			var t = new fabric.Text("Название",
+			{
+				fontSize: 12,
+				left: left,
+				top: top,
+				selectable: false,
+				lockScalingX: true,
+				lockScalingY: true,
+				hasRotatingPoint: false
+			});
+					
+
+			var g = new fabric.Group([square, t], {});
+
+			canvas.add(g);
+			canvas.renderAll();
+		}	
+
+		function objectScaling(e) {
+			var text = e.target.item(1),
+				group = e.target,
+				scaleX = text.get('width') / group.get('width'),
+				scaleY = text.get('height') / group.get('height');
+			text.set('scaleX',scaleX);
+			text.set('scaleY',scaleY);  
+		}
+
+		var xd = 50;
+		var maxX = 100;
+		var y = 0;
+		for (var i = 0; i < maxX; i++)
+		{
+			var line = new fabric.Line([0 + i * xd, 0 + xd / 2, 0 + i * xd, 1000],
+			{
+				stroke: 'gray',
+				selectable: false
+			});			
+			canvas.add(line);
+
+			if (i % 4 == 0)
+			{
+				var text = new fabric.Text(2019 + y + '',
+				{
+					fontSize: 12,
+					left: 0 + (xd * i) + xd * 3 /4,
+					top: 10,
+					selectable: false
+				});
+				canvas.add(text);
+				y++;
+			}
+		}
+
+		var yd = 50;
+		var maxY = 100;
+		var km = 0;
+		for (var i = 0; i < maxY; i++) {
+			var line = new fabric.Line([0 + xd * 3 / 4, 0 + i * yd, 2000, 0 + i * yd ],
+			{
+				stroke: 'gray',
+				selectable: false
+			});
+			canvas.add(line);
+
+			if (i % 2 == 0)
+			{
+				var text = new fabric.Text(100 + km + '',
+					{
+						fontSize: 12,
+						left: 5,
+						top: 0 + (yd * i) + yd * 6 / 7,
+						selectable: false
+					});
+				canvas.add(text);
+				km += 100;
+			}
+		}
+
+		
+	});
+</script>
+
+
+<canvas style="border:1px solid black;" id="canvas">Этот элемент не поддерживается</canvas>
 

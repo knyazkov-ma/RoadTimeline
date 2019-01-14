@@ -10,7 +10,7 @@ namespace RoadTimeline
 			bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
 						"~/Scripts/jquery-{version}.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+			bundles.Add(new ScriptBundle("~/bundles/fabric").Include(
 						"~/Scripts/fabric.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
